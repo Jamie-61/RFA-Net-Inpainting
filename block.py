@@ -217,14 +217,7 @@ class PartialConv(nn.Module):
             param.requires_grad = False
 
     def forward(self, input):
-        # http://masc.cs.gmu.edu/wiki/partialconv
-        # C(X) = W^T * X + b, C(0) = b, D(M) = 1 * M + 0 = sum(M)
-        # W^T* (M .* X) / sum(M) + b = [C(M .* X) – C(0)] / D(M) + C(0)
-        # print(input.shape)
-        # if mask is not provided, create a mask
-        # mask = torch.ones_like(input)
         mask = torch.ones(input.data.shape[0], input.data.shape[1], input.data.shape[2], input.data.shape[3]).to(input)
-        # print(mask.shape)
 
         output = self.input_conv(input * mask)
         if self.input_conv.bias is not None:
